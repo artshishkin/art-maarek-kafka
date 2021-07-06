@@ -91,4 +91,49 @@ Learn Apache Kafka for Beginners - Tutorial from Stephane Maarek (Udemy)
     -  restart consumer
     -  only new messages arrived    
 
-    
+#####  36. Kafka Consumer Groups CLI
+
+-  list consumer groups
+    -  `kafka-consumer-groups.bat --bootstrap-server localhost:9092 --list`
+        -  `my-first-application`
+        -  `my-second-application`
+-  describe consumer group
+    -  `kafka-consumer-groups.bat --bootstrap-server localhost:9092 --describe --group my-first-application`        
+```
+Consumer group 'my-first-application' has no active members.
+
+GROUP                TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID     HOST            CLIENT-ID
+my-first-application third-new-topic 2          7               7               0               -               -               -
+my-first-application third-new-topic 1          12              12              0               -               -               -
+my-first-application third-new-topic 0          12              12              0               -               -               -
+```   
+-  produce new messages (for example 3)
+-  describe once again
+    -  `kafka-consumer-groups.bat --bootstrap-server localhost:9092 --describe --group my-first-application`
+```
+Consumer group 'my-first-application' has no active members.
+
+GROUP                TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID     HOST            CLIENT-ID
+my-first-application third-new-topic 2          7               8               1               -               -               -
+my-first-application third-new-topic 1          12              13              1               -               -               -
+my-first-application third-new-topic 0          12              13              1               -               -               -
+```
+-  we have LAGs of 3 totally
+-  consume again -> LAGs will disappear
+    -  `kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic third-new-topic --group my-first-application`
+-  start consumer
+-  describe
+    -  `kafka-consumer-groups.bat --bootstrap-server localhost:9092 --describe --group my-first-application`
+```
+GROUP                TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID                                                          HOST            CLIENT-ID
+my-first-application third-new-topic 0          13              13              0               consumer-my-first-application-1-afbb9df5-61e6-467f-92c2-97e50d72af12 /127.0.0.1      consumer-my-first-application-1
+my-first-application third-new-topic 1          13              13              0               consumer-my-first-application-1-afbb9df5-61e6-467f-92c2-97e50d72af12 /127.0.0.1      consumer-my-first-application-1
+my-first-application third-new-topic 2          8               8               0               consumer-my-first-application-1-afbb9df5-61e6-467f-92c2-97e50d72af12 /127.0.0.1      consumer-my-first-application-1
+```
+
+
+
+  
+
+
+ 
