@@ -21,3 +21,15 @@ Learn Apache Kafka for Beginners - Tutorial from Stephane Maarek (Udemy)
     -  view logs
         -  `[2021-07-06 16:07:17,268] INFO [KafkaServer id=0] started (kafka.server.KafkaServer)`           
 
+#####  Start Zookeeper & Kafka (confluentinc from Baeldung)
+
+1.  Use [tutorial from Baeldung](https://www.baeldung.com/ops/kafka-docker-setup)
+2.  Start [confluentinc-baeldung/docker-compose.yml](docker-compose/confluentinc-baeldung/docker-compose.yml)
+3.  Testing Kafka with [Kafka Tool GUI](https://kafkatool.com/download.html)
+    -  add cluster
+        -  Cluster name: `confluentinc-baeldung`
+        -  Kafka Cluster Version: 2.7
+        -  Zookeeper Port: 22181
+    -  Advanced
+        -  Bootstrap servers: `localhost:29092`
+    -  Test -> OK -> Add
