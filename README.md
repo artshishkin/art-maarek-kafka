@@ -74,4 +74,21 @@ Learn Apache Kafka for Beginners - Tutorial from Stephane Maarek (Udemy)
     -  `kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic third-new-topic`
 -  consuming from beginning
     -  `kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic third-new-topic --from-beginning`    
+
+#####  35. Kafka Consumers in Group
+
+-  start 2 consumers in group
+    -  `kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic third-new-topic --group my-first-application`
+    -  populate messages to different consumers
+-  stop consumers
+-  start 1 consumer in group to read from beginning
+    -  `kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic third-new-topic --group my-second-application --from-beginning`
+    -  read all the messages    
+    -  restart consumer
+    -  no new messages
+    -  stop consumer
+    -  produce new messages
+    -  restart consumer
+    -  only new messages arrived    
+
     
