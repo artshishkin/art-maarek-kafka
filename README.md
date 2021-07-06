@@ -33,3 +33,8 @@ Learn Apache Kafka for Beginners - Tutorial from Stephane Maarek (Udemy)
     -  Advanced
         -  Bootstrap servers: `localhost:29092`
     -  Test -> OK -> Add
+    
+#####  Start Zookeeper & Kafka (wurstmeister from habr)
+
+1.  Use [tutorial from habr](https://habr.com/ru/post/505720/)
+    
