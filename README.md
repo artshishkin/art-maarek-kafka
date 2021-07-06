@@ -37,4 +37,18 @@ Learn Apache Kafka for Beginners - Tutorial from Stephane Maarek (Udemy)
 #####  Start Zookeeper & Kafka (wurstmeister from habr)
 
 1.  Use [tutorial from habr](https://habr.com/ru/post/505720/)
+
+####  Section 6: CLI (Command Line Interface) 101
+
+#####  32. Kafka Topics CLI
+
+-  create topic
+    -  `kafka-topics.bat --create --topic first-topic --zookeeper localhost:2181 --replication-factor 1 --partitions 3`
+-  list topics
+    -  `kafka-topics.bat --list --zookeeper localhost:2181`    
+    -  **OR**
+    -  `kafka-topics.bat --list --bootstrap-server localhost:9092`
+-  describe topic
+    -  `kafka-topics.bat --bootstrap-server localhost:9092 --topic first-topic --describe`    
+
     
