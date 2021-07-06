@@ -51,4 +51,21 @@ Learn Apache Kafka for Beginners - Tutorial from Stephane Maarek (Udemy)
 -  describe topic
     -  `kafka-topics.bat --bootstrap-server localhost:9092 --topic first-topic --describe`    
 
+#####  33. Kafka Console Producer CLI
+
+-  Without Key
+    -  `kafka-console-producer.bat --broker-list localhost:9092 --topic first-topic`
+-  Producer properties (example)
+    -  `kafka-console-producer.bat --broker-list localhost:9092 --topic first-topic --producer-property acks=all`    
+-  Producing to non-existing topic
+    -  `kafka-console-producer.bat --broker-list localhost:9092 --topic some-new-topic`
+    -  send message
+    -  will receive
+        -  `[2021-07-06 22:02:34,238] WARN [Producer clientId=console-producer] Error while fetching metadata with correlation id 3 : {some-new-topic=LEADER_NOT_AVAILABLE} (org.apache.kafka.clients.NetworkClient)`
+    -  but topic will be created
+    -  with 1 partition and 1 replication factor
+-  Changing default partition count
+    -  server.properties
+    -  num.partitions=3        
+
     
