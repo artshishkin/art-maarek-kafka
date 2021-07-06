@@ -132,6 +132,35 @@ my-first-application third-new-topic 2          8               8               
 ```
 
 
+#####  37. Resetting Offsets
+
+-  start consumers
+-  try to reset offsets
+    -  `kafka-consumer-groups.bat --bootstrap-server localhost:9092  --group my-first-application --reset-offsets --to-earliest --execute --topic third-new-topic`
+```
+Error: Assignments can only be reset if the group 'my-first-application' is inactive, but the current state is Stable.
+
+GROUP                          TOPIC                          PARTITION  NEW-OFFSET
+```
+-  stop consumers
+-  rerun
+    -  `kafka-consumer-groups.bat --bootstrap-server localhost:9092  --group my-first-application --reset-offsets --to-earliest --execute --topic third-new-topic`
+```
+GROUP                          TOPIC                          PARTITION  NEW-OFFSET
+my-first-application           third-new-topic                0          0
+my-first-application           third-new-topic                1          0
+my-first-application           third-new-topic                2          0
+```
+-  restart consumer -> will see all the data
+-  **shift by**
+    -  `kafka-consumer-groups.bat --bootstrap-server localhost:9092  --group my-first-application --reset-offsets --shift-by -2 --execute --topic third-new-topic`
+```
+GROUP                          TOPIC                          PARTITION  NEW-OFFSET
+my-first-application           third-new-topic                0          11
+my-first-application           third-new-topic                1          11
+my-first-application           third-new-topic                2          6
+```
+-  start consumer -> will see 6 messages (shift 2 by 3 partitions)
 
   
 
