@@ -68,4 +68,10 @@ Learn Apache Kafka for Beginners - Tutorial from Stephane Maarek (Udemy)
     -  server.properties
     -  num.partitions=3        
 
+#####  34. Kafka Console Consumer CLI
+
+-  consuming just after launching
+    -  `kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic third-new-topic`
+-  consuming from beginning
+    -  `kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic third-new-topic --from-beginning`    
     
