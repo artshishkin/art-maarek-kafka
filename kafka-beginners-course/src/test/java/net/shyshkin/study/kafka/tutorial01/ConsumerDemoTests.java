@@ -7,12 +7,15 @@ import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.Duration;
 import java.util.Collection;
 import java.util.List;
 import java.util.Properties;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @Slf4j
 class ConsumerDemoTests {
@@ -35,6 +38,7 @@ class ConsumerDemoTests {
     }
 
     @Test
+    @DisplayName("Consumer should read all the `earliest` messages from one partition then from another and so on")
     void consumerDemo() {
 
         //given
@@ -45,11 +49,22 @@ class ConsumerDemoTests {
 
         //then
         boolean stopPolling = false;
+        int lastPartition = -1;
+        long lastOffset = -1;
+
         while (!stopPolling) {
             ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
             for (ConsumerRecord<String, String> record : records) {
 
                 logRecord(record);
+                int partition = record.partition();
+                if (lastPartition == -1) lastPartition = partition;
+                assertThat(partition).isEqualTo(lastPartition);
+
+                long offset = record.offset();
+                if (lastOffset != -1)
+                    assertThat(offset).isEqualTo(lastOffset + 1);
+                lastOffset = offset;
 
                 if ("exit".equals(record.value())) {
                     stopPolling = true;
