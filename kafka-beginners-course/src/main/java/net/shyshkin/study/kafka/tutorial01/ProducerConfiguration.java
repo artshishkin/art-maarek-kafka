@@ -1,7 +1,6 @@
 package net.shyshkin.study.kafka.tutorial01;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.producer.RecordMetadata;
 import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.util.Properties;
@@ -21,13 +20,4 @@ public class ProducerConfiguration {
         return properties;
     }
 
-    static void logMetadata(RecordMetadata metadata) {
-        log.info("recordMetadata: {}", metadata.toString());
-        log.info("partition: {}", metadata.partition());
-        log.info("offset: {}", metadata.offset());
-        log.info("serializedKeySize: {}", metadata.serializedKeySize());
-        log.info("serializedValueSize: {}", metadata.serializedValueSize());
-        log.info("topic: {}", metadata.topic());
-        log.info("timestamp: {}", metadata.timestamp());
-    }
 }
