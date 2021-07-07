@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
-import org.apache.kafka.common.serialization.StringSerializer;
 
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
@@ -13,12 +12,9 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 
-import static org.apache.kafka.clients.producer.ProducerConfig.*;
-
 @Slf4j
 public class ProducerDemo {
 
-    public static final String TOPIC = "java-test-topic";
     public static final Faker FAKER = Faker.instance();
 
     public static void main(String[] args) throws InterruptedException, ExecutionException, TimeoutException {
@@ -26,25 +22,17 @@ public class ProducerDemo {
         log.info("Demo is starting...");
 
         // create producer properties
-        Properties properties = new Properties();
-        properties.put(BOOTSTRAP_SERVERS_CONFIG, "localhost:29092");
-        properties.put(KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-        properties.put(VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+        Properties properties = ProducerConfiguration.getProperties();
 
         //create producer
         KafkaProducer<String, String> producer = new KafkaProducer<>(properties);
 
         //send data
-        ProducerRecord<String, String> record = new ProducerRecord<>(TOPIC, FAKER.educator().university());
+        ProducerRecord<String, String> record = new ProducerRecord<>(ProducerConfiguration.TOPIC, FAKER.educator().university());
         Future<RecordMetadata> send = producer.send(record);
         RecordMetadata recordMetadata = send.get(3, TimeUnit.SECONDS);
-        log.info("recordMetadata: {}", recordMetadata.toString());
-        log.info("partition: {}", recordMetadata.partition());
-        log.info("offset: {}", recordMetadata.offset());
-        log.info("serializedKeySize: {}", recordMetadata.serializedKeySize());
-        log.info("serializedValueSize: {}", recordMetadata.serializedValueSize());
-        log.info("topic: {}", recordMetadata.topic());
-        log.info("timestamp: {}", recordMetadata.timestamp());
+
+        ProducerConfiguration.logMetadata(recordMetadata);
 
         producer.flush();
         producer.close();
