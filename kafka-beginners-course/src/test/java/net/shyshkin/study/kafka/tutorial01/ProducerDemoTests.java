@@ -7,11 +7,10 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashSet;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -106,6 +105,80 @@ class ProducerDemoTests {
                 .hasSize(3)
                 .contains(0, 1, 2);
     }
+
+    @Test
+    void allMessagesWithTheSameKeyShouldBeInTheSamePartition() {
+
+        //given
+        Map<Integer, Integer> partitionCount = new HashMap<>();
+        int messageCount = 100;
+        String key = "id_" + UUID.randomUUID();
+
+        //when
+        for (int i = 0; i < messageCount; i++) {
+
+            String messageToSend = FAKER.educator().university();
+            log.info("Sending message: {}", messageToSend);
+
+            ProducerRecord<String, String> record = new ProducerRecord<>(ProducerConfiguration.TOPIC, key, messageToSend);
+            producer.send(record,
+                    (metadata, exception) -> {
+                        if (exception != null) {
+                            log.error("Exception happened", exception);
+                        } else {
+                            assertThat(metadata.topic()).isEqualTo(ProducerConfiguration.TOPIC);
+                            assertThat(metadata.serializedKeySize()).isGreaterThan(1);
+                            int partition = metadata.partition();
+                            partitionCount.merge(partition, 1, Integer::sum);
+                        }
+                    }
+            );
+        }
+
+        producer.flush(); //block execution to make it synchronous - don't do this in production
+
+        //then
+        assertThat(partitionCount.keySet())
+                .hasSize(1)
+                .containsAnyOf(0, 1, 2);
+
+        assertThat(partitionCount.values())
+                .hasSize(1)
+                .contains(messageCount);
+    }
+
+    @RepeatedTest(10)
+//    @Test
+    void allMessagesWithTheSameKeyAndConstantBrokerCount_ShouldBeInTheSamePartition_ALL_OVER_THE_WORLD() {
+
+        //given
+        int messageCount = 10;
+        String key = "id_constant";
+        int expectedPartition = 2;
+
+        //when
+        for (int i = 0; i < messageCount; i++) {
+
+            String messageToSend = FAKER.educator().university();
+            log.info("Sending message: {}", messageToSend);
+
+            ProducerRecord<String, String> record = new ProducerRecord<>(ProducerConfiguration.TOPIC, key, messageToSend);
+            producer.send(record,
+                    (metadata, exception) -> {
+                        if (exception != null) {
+                            log.error("Exception happened", exception);
+                        } else {
+                            int partition = metadata.partition();
+
+                            //then
+                            assertThat(partition).isEqualTo(expectedPartition);
+                        }
+                    }
+            );
+        }
+    }
+
+
 
     void logMetadata(RecordMetadata metadata) {
         log.info("recordMetadata: {}", metadata.toString());
