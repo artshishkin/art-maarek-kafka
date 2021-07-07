@@ -27,7 +27,7 @@ class ProducerDemoTests {
     @BeforeEach
     void setUp() {
         // create producer properties
-        Properties properties = ProducerConfiguration.getProperties();
+        Properties properties = KafkaConfiguration.getProducerProperties();
 
         //create producer
         producer = new KafkaProducer<>(properties);
@@ -47,7 +47,7 @@ class ProducerDemoTests {
         log.info("Sending message: {}", messageToSend);
 
         //when
-        ProducerRecord<String, String> record = new ProducerRecord<>(ProducerConfiguration.TOPIC, messageToSend);
+        ProducerRecord<String, String> record = new ProducerRecord<>(KafkaConfiguration.TOPIC, messageToSend);
         producer.send(record);
 
         //then
@@ -62,14 +62,14 @@ class ProducerDemoTests {
         log.info("Sending message: {}", messageToSend);
 
         //when
-        ProducerRecord<String, String> record = new ProducerRecord<>(ProducerConfiguration.TOPIC, messageToSend);
+        ProducerRecord<String, String> record = new ProducerRecord<>(KafkaConfiguration.TOPIC, messageToSend);
         Future<RecordMetadata> send = producer.send(record);
 
         //then
         RecordMetadata recordMetadata = send.get(3, TimeUnit.SECONDS);
         logMetadata(recordMetadata);
 
-        assertThat(recordMetadata.topic()).isEqualTo(ProducerConfiguration.TOPIC);
+        assertThat(recordMetadata.topic()).isEqualTo(KafkaConfiguration.TOPIC);
     }
 
     @Test
@@ -86,14 +86,14 @@ class ProducerDemoTests {
             String messageToSend = FAKER.educator().university();
             log.info("Sending message: {}", messageToSend);
 
-            ProducerRecord<String, String> record = new ProducerRecord<>(ProducerConfiguration.TOPIC, messageToSend);
+            ProducerRecord<String, String> record = new ProducerRecord<>(KafkaConfiguration.TOPIC, messageToSend);
             producer.send(record,
                     (metadata, exception) -> {
                         if (exception != null) {
                             log.error("Exception happened", exception);
                         } else {
                             logMetadata(metadata);
-                            assertThat(metadata.topic()).isEqualTo(ProducerConfiguration.TOPIC);
+                            assertThat(metadata.topic()).isEqualTo(KafkaConfiguration.TOPIC);
                             int partition = metadata.partition();
                             partitions.add(partition);
                         }
@@ -120,13 +120,13 @@ class ProducerDemoTests {
             String messageToSend = FAKER.educator().university();
             log.info("Sending message: {}", messageToSend);
 
-            ProducerRecord<String, String> record = new ProducerRecord<>(ProducerConfiguration.TOPIC, key, messageToSend);
+            ProducerRecord<String, String> record = new ProducerRecord<>(KafkaConfiguration.TOPIC, key, messageToSend);
             producer.send(record,
                     (metadata, exception) -> {
                         if (exception != null) {
                             log.error("Exception happened", exception);
                         } else {
-                            assertThat(metadata.topic()).isEqualTo(ProducerConfiguration.TOPIC);
+                            assertThat(metadata.topic()).isEqualTo(KafkaConfiguration.TOPIC);
                             assertThat(metadata.serializedKeySize()).isGreaterThan(1);
                             int partition = metadata.partition();
                             partitionCount.merge(partition, 1, Integer::sum);
@@ -162,7 +162,7 @@ class ProducerDemoTests {
             String messageToSend = FAKER.educator().university();
             log.info("Sending message: {}", messageToSend);
 
-            ProducerRecord<String, String> record = new ProducerRecord<>(ProducerConfiguration.TOPIC, key, messageToSend);
+            ProducerRecord<String, String> record = new ProducerRecord<>(KafkaConfiguration.TOPIC, key, messageToSend);
             producer.send(record,
                     (metadata, exception) -> {
                         if (exception != null) {
