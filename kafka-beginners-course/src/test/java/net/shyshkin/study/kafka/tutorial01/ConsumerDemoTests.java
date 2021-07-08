@@ -2,10 +2,7 @@ package net.shyshkin.study.kafka.tutorial01;
 
 import com.github.javafaker.Faker;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.consumer.*;
 import org.apache.kafka.common.TopicPartition;
 import org.junit.jupiter.api.*;
 
@@ -117,8 +114,8 @@ class ConsumerDemoTests {
     }
 
     @Test
-    @DisplayName("3 consumers in a group subscribes topic with 3 partitions -> eachwill pollChanging Group ID will lead to that Consumer will read all the `earliest` messages from one partition then from another and so on")
-    void multipleConsumersInGroup() {
+    @DisplayName("with ConsumerRebalanceListener - 3 consumers in a group subscribes topic with 3 partitions -> eachwill pollChanging Group ID will lead to that Consumer will read all the `earliest` messages from one partition then from another and so on")
+    void multipleConsumersInGroup_withConsumerRebalanceListener() {
 
         //given
         String groupId = "group_id_" + UUID.randomUUID();
@@ -133,7 +130,17 @@ class ConsumerDemoTests {
                 .collect(Collectors.toList());
 
         //when
-        consumers.forEach(cons -> cons.subscribe(topics));
+        consumers.forEach(cons -> cons.subscribe(topics, new ConsumerRebalanceListener() {
+            @Override
+            public void onPartitionsRevoked(Collection<TopicPartition> partitions) {
+                log.info("onPartitionsRevoked: {}", partitions);
+            }
+
+            @Override
+            public void onPartitionsAssigned(Collection<TopicPartition> partitions) {
+                log.info("onPartitionsAssigned: {}", partitions);
+            }
+        }));
 
         //then
         await()
