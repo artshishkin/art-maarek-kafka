@@ -6,6 +6,7 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.common.TopicPartition;
 import org.junit.jupiter.api.*;
 
 import java.time.Duration;
@@ -117,7 +118,7 @@ class ConsumerDemoTests {
 
     @Test
     @DisplayName("3 consumers in a group subscribes topic with 3 partitions -> eachwill pollChanging Group ID will lead to that Consumer will read all the `earliest` messages from one partition then from another and so on")
-    void multipleConsumersInGroup() throws InterruptedException {
+    void multipleConsumersInGroup() {
 
         //given
         String groupId = "group_id_" + UUID.randomUUID();
@@ -173,6 +174,47 @@ class ConsumerDemoTests {
 
         consumerPartitions.forEach((key, partitions) -> assertThat(partitions).containsOnly(partitions.get(0)));
 
+    }
+
+
+    @Test
+    @DisplayName("Assign and Seek are mostly used to replay data or fetch a specific message")
+    void assignAndSeek() {
+
+        //given
+        properties.remove(ConsumerConfig.GROUP_ID_CONFIG);
+        consumer = new KafkaConsumer<>(properties);
+        long offsetToReadFrom = 15L;
+
+        //when
+        TopicPartition partitionToReadFrom = new TopicPartition(KafkaConfiguration.TOPIC, 0);
+        consumer.assign(List.of(partitionToReadFrom));
+        consumer.seek(partitionToReadFrom, offsetToReadFrom);
+
+        //then
+        boolean stopPolling = false;
+        long lastOffset = offsetToReadFrom - 1;
+        int messagesCount = 0;
+        int maxMessagesCount = 5;
+
+        while (!stopPolling) {
+            ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
+            for (ConsumerRecord<String, String> record : records) {
+
+                logRecord(record);
+                int partition = record.partition();
+                assertThat(partition).isEqualTo(partitionToReadFrom.partition());
+
+                long offset = record.offset();
+                assertThat(offset).isEqualTo(lastOffset + 1);
+                lastOffset = offset;
+
+                if (++messagesCount >= maxMessagesCount) {
+                    stopPolling = true;
+                    break;
+                }
+            }
+        }
     }
 
     private void logRecord(ConsumerRecord<String, String> record) {
