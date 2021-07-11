@@ -14,6 +14,7 @@
 
     <modules>
         <module>kafka-beginners-course</module>
+        <module>kafka-real-world-twitter</module>
     </modules>
 
     <properties>
@@ -37,6 +38,11 @@
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>com.twitter</groupId>
+                <artifactId>hbc-core</artifactId> <!-- or hbc-twitter4j -->
+                <version>2.2.0</version> <!-- or whatever the latest version is -->
+            </dependency>
             <dependency>
                 <groupId>org.testcontainers</groupId>
                 <artifactId>testcontainers-bom</artifactId>
@@ -72,6 +78,11 @@
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-simple</artifactId>
+                <version>1.7.31</version>
+            </dependency>
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
                 <version>1.7.31</version>
             </dependency>
         </dependencies>
