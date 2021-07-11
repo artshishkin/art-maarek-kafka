@@ -37,3 +37,5 @@ node_modules/
 /src/main/resources/assignment/Section03Mono/file_to_delete.txt
 
 SECRETS.md
+!**/secrets.properties
+/kafka-real-world-twitter/src/main/resources/secrets.properties
