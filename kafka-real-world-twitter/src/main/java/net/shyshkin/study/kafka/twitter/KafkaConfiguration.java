@@ -11,10 +11,10 @@ import java.util.Properties;
 @Slf4j
 public class KafkaConfiguration {
 
-    public static final String TOPIC = "java-test-topic";
+    public static final String TOPIC = "twitter-tweets";
     public static final String SERVERS = "localhost:29092";
 
-    private static final String DEFAULT_CONSUMER_GROUP_ID = "my-fours-application";
+    private static final String DEFAULT_CONSUMER_GROUP_ID = "twitter-application";
 
     public static Properties getProducerProperties() {
         Properties properties = new Properties();
