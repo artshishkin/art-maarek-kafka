@@ -175,4 +175,29 @@ kafka-console-producer --broker-list 127.0.0.1:9092 --topic first_topic --proper
 kafka-console-consumer --bootstrap-server 127.0.0.1:9092 --topic first_topic --from-beginning --property print.key=true --property key.separator=,
 ```
 
+####  Section 9: Kafka Twitter Producer &  Advanced Configurations
+ 
+#####  56. Twitter Setup
+
+1.  Take the developer account
+    -  [https://developer.twitter.com/](https://developer.twitter.com/)
+    -  took for 2 days to be approved (and some conversation with support team)
+2.  Create Project
+    -  Name: `Kafka for Beginners Course Project`
+    -  Describe you: `Student`
+    -  Describe your new Project:      
+`
+I intend to use Twitter APIs to get real time data streams  into an application that will put data into Kafka. This data will end up in ElasticSearch at the end and this is just for proof-of-concept purposes. No commercial application will result out of this and I won't have any users besides, just myself. Twitter data will not be displayed, and I will only extract tweets on low volume terms.
+I do not intend to analyze Tweets, Twitter users, or their content.
+I won't display Twitter content off of Twitter.
+`
+    -  App name: `Kafka for Beginners Art App`
+    -  Create
+3.  Take keys and tokens    
+    - API Key: `3bG...0seR`
+    - API Secret Key: `4DcUf...LGEa` 
+    - Bearer token: `AAAAAA...DPzrjKRQD` 
+    - Access Token: `893...T8ZUmF`
+    - Access Token Secret: `oTxnO...haPgc`
+ 
  
