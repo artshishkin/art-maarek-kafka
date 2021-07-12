@@ -210,3 +210,57 @@ I won't display Twitter content off of Twitter.
     -  URL: `https://a9..7b:5r..sj@twitter-tweets-6...42.eu-central-1.bonsaisearch.net:443`
     -  ACCESS KEY: `a9..7b`
     -  ACCESS SECRET: `5r..sj`
+
+#####  72. ElasticSearch 101
+
+-  [Bansai Console](https://app.bonsai.io/clusters/twitter-tweets-6787269342/console)
+-  [Elastic docs](https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster.html)
+-  Health status: `/_cluster/health`
+-  Wait for health status: `/_cluster/health?wait_for_status=yellow&timeout=50s`
+-  Nodes: `/_nodes`
+-  Indices: `_cat/indices`
+-  Create index: `twitter`
+    -  `/PUT /twitter`
+    -  `/GET /_cat/indices?v`
+-  Insert data into index:
+    - `/PUT /twitter/tweets/1`
+    -  Body: `{"course":"Kafka for Beginners","instructor":"Stephane Maarek","module":"Elasticsearch"}`     
+    -  Response:
+```json
+{
+  "_index": "twitter",
+  "_type": "tweets",
+  "_id": "1",
+  "_version": 1,
+  "result": "created",
+  "_shards": {
+    "total": 2,
+    "successful": 2,
+    "failed": 0
+  },
+  "_seq_no": 0,
+  "_primary_term": 1
+}
+```  
+-  Update document:
+    -  `/PUT /twitter/tweets/1` and new body  
+-  Get document:
+    -  `/GET /twitter/tweets/1` 
+-  Delete document:       
+    -  `/DELETE /twitter/tweets/1` 
+-  Get again and 404
+```json
+{
+  "_index": "twitter",
+  "_type": "tweets",
+  "_id": "1",
+  "found": false
+}
+```
+-  Delete the index
+    -  `/DELETE /twitter` -> 200
+```json
+{
+  "acknowledged": true
+}
+```            
