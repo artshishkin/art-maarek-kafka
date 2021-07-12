@@ -14,7 +14,7 @@ public class KafkaConfiguration {
     public static final String TOPIC = "twitter-tweets";
     public static final String SERVERS = "localhost:29092,localhost:19092,localhost:39092";
 
-    private static final String DEFAULT_CONSUMER_GROUP_ID = "twitter-application";
+    private static final String DEFAULT_CONSUMER_GROUP_ID = "kafka-demo-elasticsearch";
 
     public static Properties getProducerProperties() {
         Properties properties = new Properties();
