@@ -264,3 +264,11 @@ I won't display Twitter content off of Twitter.
   "acknowledged": true
 }
 ```            
+
+#####  73. Consumer Part 1 - Setup Project
+
+-  after running test we get document id: `cJw7nHoBWCBIynXURU6W`
+-  `/GET /twitter/tweets/cJw7nHoBWCBIynXURU6W`
+-  **or**
+-  `/GET /twitter/_doc/cJw7nHoBWCBIynXURU6W`
+ 
