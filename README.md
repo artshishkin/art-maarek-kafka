@@ -200,4 +200,13 @@ I won't display Twitter content off of Twitter.
     - Access Token: `893...T8ZUmF`
     - Access Token Secret: `oTxnO...haPgc`
  
- 
+####  Section 10: Kafka ElasticSearch Consumer & Advanced Configurations
+
+#####  71. Setting up ElasticSearch in the Cloud
+
+-  Use [https://bonsai.io](https://bonsai.io) 
+-  Cluster Name: `TWITTER_TWEETS`
+-  Copy Credentials and URL
+    -  URL: `https://a9..7b:5r..sj@twitter-tweets-6...42.eu-central-1.bonsaisearch.net:443`
+    -  ACCESS KEY: `a9..7b`
+    -  ACCESS SECRET: `5r..sj`
