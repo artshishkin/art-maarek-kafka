@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>kafka-real-world-twitter</artifactId>
+    <artifactId>kafka-twitter-producer</artifactId>
 
     <dependencies>
         <dependency>

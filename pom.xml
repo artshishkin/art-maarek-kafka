@@ -14,7 +14,7 @@
 
     <modules>
         <module>kafka-beginners-course</module>
-        <module>kafka-real-world-twitter</module>
+        <module>kafka-twitter-producer</module>
     </modules>
 
     <properties>

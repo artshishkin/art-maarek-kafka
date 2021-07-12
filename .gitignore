@@ -38,4 +38,4 @@ node_modules/
 
 SECRETS.md
 !**/secrets.properties
-/kafka-real-world-twitter/src/main/resources/secrets.properties
+/kafka-twitter-producer/src/main/resources/secrets.properties
