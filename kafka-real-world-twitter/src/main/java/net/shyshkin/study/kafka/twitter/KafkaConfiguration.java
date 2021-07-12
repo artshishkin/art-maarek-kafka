@@ -12,7 +12,7 @@ import java.util.Properties;
 public class KafkaConfiguration {
 
     public static final String TOPIC = "twitter-tweets";
-    public static final String SERVERS = "localhost:29092";
+    public static final String SERVERS = "localhost:29092,localhost:19092,localhost:39092";
 
     private static final String DEFAULT_CONSUMER_GROUP_ID = "twitter-application";
 
@@ -21,6 +21,13 @@ public class KafkaConfiguration {
         properties.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, SERVERS);
         properties.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         properties.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
+
+        //create safer Producer
+        properties.put(ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG, true);
+        properties.put(ProducerConfig.ACKS_CONFIG, "all");
+        properties.put(ProducerConfig.RETRIES_CONFIG, Integer.MAX_VALUE);
+        properties.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, 5);
+
         return properties;
     }
 
