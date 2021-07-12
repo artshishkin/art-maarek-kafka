@@ -21,7 +21,6 @@ public class ElasticsearchConsumer {
     public void putJson(String jsonString) throws IOException {
 
         IndexRequest indexRequest = new IndexRequest("twitter")
-                .type("tweets")
                 .source(jsonString, XContentType.JSON);
 
         IndexResponse indexResponse = client.index(indexRequest, RequestOptions.DEFAULT);
