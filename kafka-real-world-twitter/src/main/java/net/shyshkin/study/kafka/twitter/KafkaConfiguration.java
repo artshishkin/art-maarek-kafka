@@ -28,6 +28,11 @@ public class KafkaConfiguration {
         properties.put(ProducerConfig.RETRIES_CONFIG, Integer.MAX_VALUE);
         properties.put(ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION, 5);
 
+        //high throughput producer (at the expense of a bit of latency and CPU usage)
+        properties.put(ProducerConfig.COMPRESSION_TYPE_CONFIG, "zstd");
+        properties.put(ProducerConfig.LINGER_MS_CONFIG, 100);
+        properties.put(ProducerConfig.BATCH_SIZE_CONFIG, 32*1024); //32kB batch size
+
         return properties;
     }
 

@@ -28,7 +28,7 @@ import java.util.concurrent.TimeUnit;
 public class TwitterProducer {
 
     private Client hosebirdClient;
-    private final List<String> terms = Lists.newArrayList("bitcoin");
+    private final List<String> terms = Lists.newArrayList("bitcoin","usa","politics","sport","italy");
 
     public void run() {
 
