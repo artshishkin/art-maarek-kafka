@@ -319,7 +319,7 @@ kafka-demo-elasticsearch twitter-tweets  2          181             181         
 
 ####  Section 12: Kafka Extended APIs for Developers
 
-#####  86. Kafka Connect Twitter Hands-On
+#####  86.1 Kafka Connect Twitter Hands-On - Locally
 
 -  go to hithub and download [release](https://github.com/jcustenborder/kafka-connect-twitter/releases/tag/0.2.26)
 -  connect-standalone.bat
@@ -344,6 +344,23 @@ org.reflections.ReflectionsException: could not get type for name org.jdom.outpu
 	at org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader$InternalReflections.<init>(DelegatingClassLoader.java:444)
 ```
    
+#####  86.2 Kafka Connect Twitter Hands-On - in Docker
+
+-  start `docker-compose-kafka-elastic.yml`
+-  go inside the container of kafka_2:
+    -  `docker container exec -it confluentinc-baeldung_kafka-2_1 sh`
+    -  `cd /usr/share/kafka-connect/`
+-  start kafka connect    
+    -  `connect-standalone connect-standalone.properties twitter-secret.properties`
+-  view consumer of `twitter_status_connect`
+-  stop it - `Ctrl+C`
+-  **OR**
+-  run command directly
+    -  `docker container exec -it -w /usr/share/kafka-connect confluentinc-baeldung_kafka-2_1 sh`
+    -  `./run.sh`
+-  **OR**
+-  `docker container exec -it -w /usr/share/kafka-connect confluentinc-baeldung_kafka-2_1 sh "./run.sh"`    
+
 
 
               

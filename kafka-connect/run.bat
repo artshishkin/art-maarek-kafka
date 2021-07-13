@@ -1,1 +1,1 @@
-connect-standalone.bat connect-standalone.properties twitter-secret.properties
+connect-standalone.bat connect-standalone-local.properties twitter-secret.properties
