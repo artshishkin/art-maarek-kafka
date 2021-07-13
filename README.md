@@ -277,3 +277,11 @@ I won't display Twitter content off of Twitter.
 -  2 strategies to create Elasticsearch ID
     -  kafka generic ID: `id = record.topic() + record.partition() + record.offset()`
     -  twitter feed specific ID: `id = extractIdFromTweet(record.value())`
+
+#####  78. Consumer Offset Commit Strategies
+
+-  2 strategies:
+    -  (easy) `enable.auto.commit=true` & synchronous processing of batches
+        -  offsets will be commited at a regular interval (`auto.commit.interval.ms=5000` by default) every time you call `.poll()`
+        -  is quite risky because if you don't use synchronous processing you will be in `at-most-once` behaviour because offsets will be committed before data is processed    
+    -  (medium) `enable.auto.commit=false` & manual commit of offsets    
