@@ -1,6 +1,8 @@
 package net.shyshkin.study.kafka.consumer;
 
 import lombok.extern.slf4j.Slf4j;
+import net.shyshkin.study.kafka.consumer.converters.GsonTwitterIdExtractor;
+import net.shyshkin.study.kafka.consumer.converters.TwitterIdExtractor;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -21,23 +23,25 @@ public class ElasticsearchConsumer {
 
     private final RestHighLevelClient client;
     private boolean stopPolling = false;
+    private static final TwitterIdExtractor idExtractor = new GsonTwitterIdExtractor();
 
     public ElasticsearchConsumer() {
         client = ElasticsearchConfiguration.getInstance().getClient();
     }
 
-    public void putJson(String jsonString) throws IOException {
+    public void putJson(String jsonString, String id) throws IOException {
 
         IndexRequest indexRequest = new IndexRequest("twitter")
+                .id(id)
                 .source(jsonString, XContentType.JSON);
 
         IndexResponse indexResponse = client.index(indexRequest, RequestOptions.DEFAULT);
-        String id = indexResponse.getId();
-        log.info("Document id: {}", id);
+        String savedId = indexResponse.getId();
+        log.info("Document id: {}", savedId);
         log.info("Index Response: {}", indexResponse);
     }
 
-    public void stop() throws IOException {
+    public void stop() {
         stopPolling = true;
     }
 
@@ -59,7 +63,9 @@ public class ElasticsearchConsumer {
             for (ConsumerRecord<String, String> record : records) {
                 String message = record.value();
                 try {
-                    putJson(message);
+//                    String id = record.topic() + "_" + record.partition() + "_" + record.offset();
+                    String id = idExtractor.extract(record.value());
+                    putJson(message, id);
                 } catch (IOException exception) {
                     log.error("Exception while putting JSON into elasticsearch", exception);
                 }

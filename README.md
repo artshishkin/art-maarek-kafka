@@ -272,3 +272,8 @@ I won't display Twitter content off of Twitter.
 -  **or**
 -  `/GET /twitter/_doc/cJw7nHoBWCBIynXURU6W`
  
+#####  76. Consumer Part 3 - Idempotence
+
+-  2 strategies to create Elasticsearch ID
+    -  kafka generic ID: `id = record.topic() + record.partition() + record.offset()`
+    -  twitter feed specific ID: `id = extractIdFromTweet(record.value())`

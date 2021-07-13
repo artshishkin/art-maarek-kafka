@@ -4,6 +4,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
+import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 class ElasticsearchConsumerTest {
@@ -17,7 +18,7 @@ class ElasticsearchConsumerTest {
         elasticsearchConsumer = new ElasticsearchConsumer();
 
         //when
-        elasticsearchConsumer.putJson(jsonString);
+        elasticsearchConsumer.putJson(jsonString, UUID.randomUUID().toString());
 
         //then
 
