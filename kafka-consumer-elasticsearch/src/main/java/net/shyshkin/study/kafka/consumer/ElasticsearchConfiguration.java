@@ -31,8 +31,8 @@ public class ElasticsearchConfiguration {
 
     public RestHighLevelClient getClient() {
         if (client == null)
-//            client = createLocalClient();
-            client = createSecuredClient();
+            client = createLocalClient();
+//            client = createSecuredClient();
         return client;
     }
 

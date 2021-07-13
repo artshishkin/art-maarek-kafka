@@ -6,6 +6,8 @@ import net.shyshkin.study.kafka.consumer.converters.TwitterIdExtractor;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.elasticsearch.action.bulk.BulkRequest;
+import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.client.RequestOptions;
@@ -61,24 +63,41 @@ public class ElasticsearchConsumer {
         while (!stopPolling) {
             ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
 
-            log.info("Received: {} records", records.count());
+            int recordsCount = records.count();
+            log.info("Received: {} records", recordsCount);
+            BulkRequest bulkRequest = new BulkRequest();
 
             for (ConsumerRecord<String, String> record : records) {
+
                 String message = record.value();
                 try {
-                    log.info("Message: {}", message);
                     String id = idExtractor.extract(message);
-                    putJson(message, id);
-                    Thread.sleep(10);
-                } catch (IOException exception) {
-                    log.error("Exception while putting JSON into elasticsearch", exception);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+
+                    IndexRequest indexRequest = new IndexRequest("twitter")
+                            .id(id)
+                            .source(message, XContentType.JSON);
+
+                    bulkRequest.add(indexRequest);
+                } catch (Exception exception) {
+                    log.warn("Skipping bad data: {}", message);
+                    log.error("Exception in bulk process", exception);
                 }
             }
-            log.info("Committing offsets...");
-            consumer.commitSync();
-            log.info("Offsets have been committed");
+
+            if (recordsCount > 0) {
+                try {
+                    BulkResponse bulkResponse = client.bulk(bulkRequest, RequestOptions.DEFAULT);
+
+                    log.info("Bulk status: {}", bulkResponse.status());
+                    log.info("Ingest Took: {}", bulkResponse.getIngestTook());
+                    log.info("Took: {}", bulkResponse.getTook());
+                    log.info("Committing offsets...");
+                    consumer.commitSync();
+                    log.info("Offsets have been committed");
+                } catch (IOException exception) {
+                    log.error("Exception in bulk insert", exception);
+                }
+            }
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {

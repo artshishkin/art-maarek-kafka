@@ -44,7 +44,7 @@ public class KafkaConfiguration {
         properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, DEFAULT_CONSUMER_GROUP_ID);
         properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         properties.setProperty(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
-        properties.setProperty(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "10");
+        properties.setProperty(ConsumerConfig.MAX_POLL_RECORDS_CONFIG, "100");
         return properties;
     }
 
