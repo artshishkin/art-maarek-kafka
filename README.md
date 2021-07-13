@@ -304,4 +304,15 @@ curl --location --request PUT 'http://localhost:9200/twitter/_settings' \
 /PUT /twitter/_settings {"index.mapping.total_fields.limit": 2000}
 ```
 
-        
+#####  82. Consumer Part 6 - Replaying Data
+
+-  `kafka-consumer-groups.bat --bootstrap-server localhost:29092 --group kafka-demo-elasticsearch --describe`
+    -  LAG = 0 (we took all the messages and committed them)
+    -  when consumers are running we get
+```
+GROUP                    TOPIC           PARTITION  CURRENT-OFFSET  LOG-END-OFFSET  LAG             CONSUMER-ID                                                              HOST            CLIENT-ID
+kafka-demo-elasticsearch twitter-tweets  0          148             148             0               consumer-kafka-demo-elasticsearch-1-49f3a15c-1e78-4699-81a8-abf52181fecc /172.26.0.1     consumer-kafka-demo-elasticsearch-1
+kafka-demo-elasticsearch twitter-tweets  1          187             187             0               consumer-kafka-demo-elasticsearch-1-49f3a15c-1e78-4699-81a8-abf52181fecc /172.26.0.1     consumer-kafka-demo-elasticsearch-1
+kafka-demo-elasticsearch twitter-tweets  2          181             181             0               consumer-kafka-demo-elasticsearch-1-49f3a15c-1e78-4699-81a8-abf52181fecc /172.26.0.1     consumer-kafka-demo-elasticsearch-1
+```    
+-  `kafka-consumer-groups.bat --bootstrap-server localhost:29092 --group kafka-demo-elasticsearch --reset-offsets --execute --to-earliest --topic twitter-tweets`          
