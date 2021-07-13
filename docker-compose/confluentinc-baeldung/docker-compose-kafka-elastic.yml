@@ -80,6 +80,14 @@ services:
     volumes:
       - elasticsearch_data:/usr/share/elasticsearch/data
 
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.10.2
+    ports: ["5601:5601"]
+    restart: on-failure
+    depends_on:
+      elasticsearch:
+        condition: service_healthy
+
 volumes:
   zookeeper_data:
   zookeeper_log:
