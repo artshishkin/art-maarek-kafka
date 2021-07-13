@@ -60,15 +60,29 @@ public class ElasticsearchConsumer {
 
         while (!stopPolling) {
             ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
+
+            log.info("Received: {} records", records.count());
+
             for (ConsumerRecord<String, String> record : records) {
                 String message = record.value();
                 try {
-//                    String id = record.topic() + "_" + record.partition() + "_" + record.offset();
-                    String id = idExtractor.extract(record.value());
+                    log.info("Message: {}", message);
+                    String id = idExtractor.extract(message);
                     putJson(message, id);
+                    Thread.sleep(10);
                 } catch (IOException exception) {
                     log.error("Exception while putting JSON into elasticsearch", exception);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
+            }
+            log.info("Committing offsets...");
+            consumer.commitSync();
+            log.info("Offsets have been committed");
+            try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         }
         try {

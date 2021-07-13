@@ -33,7 +33,7 @@ class ElasticsearchConsumerTest {
         CompletableFuture.runAsync(() -> elasticsearchConsumer.run());
 
         //then
-        Thread.sleep(10000);
+        Thread.sleep(15000);
         elasticsearchConsumer.stop();
         Thread.sleep(2000);
     }
