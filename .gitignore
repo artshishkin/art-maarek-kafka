@@ -38,5 +38,6 @@ node_modules/
 
 SECRETS.md
 !**/secrets.properties
+twitter-secret.properties
 /kafka-twitter-producer/src/main/resources/secrets.properties
 /kafka-consumer-elasticsearch/src/main/resources/secrets.properties

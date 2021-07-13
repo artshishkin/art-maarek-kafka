@@ -315,4 +315,35 @@ kafka-demo-elasticsearch twitter-tweets  0          148             148         
 kafka-demo-elasticsearch twitter-tweets  1          187             187             0               consumer-kafka-demo-elasticsearch-1-49f3a15c-1e78-4699-81a8-abf52181fecc /172.26.0.1     consumer-kafka-demo-elasticsearch-1
 kafka-demo-elasticsearch twitter-tweets  2          181             181             0               consumer-kafka-demo-elasticsearch-1-49f3a15c-1e78-4699-81a8-abf52181fecc /172.26.0.1     consumer-kafka-demo-elasticsearch-1
 ```    
--  `kafka-consumer-groups.bat --bootstrap-server localhost:29092 --group kafka-demo-elasticsearch --reset-offsets --execute --to-earliest --topic twitter-tweets`          
+-  `kafka-consumer-groups.bat --bootstrap-server localhost:29092 --group kafka-demo-elasticsearch --reset-offsets --execute --to-earliest --topic twitter-tweets`
+
+####  Section 12: Kafka Extended APIs for Developers
+
+#####  86. Kafka Connect Twitter Hands-On
+
+-  go to hithub and download [release](https://github.com/jcustenborder/kafka-connect-twitter/releases/tag/0.2.26)
+-  connect-standalone.bat
+```shell script
+   USAGE: "c:\Users\Admin\Downloads\kafka\bin\windows\connect-standalone.bat" connect-standalone.properties
+```
+-  copy file `\kafka\config\connect-standalone.properties` into the project
+    -  add `plugin.path=connectors`
+-  create `twitter.properties` (also `twitter-secret.properties`)
+-  create topics in kafka
+    -  `kafka-topics.bat --create --topic twitter_status_connect --bootstrap-server localhost:29092 --replication-factor 1 --partitions 3`    
+    -  `kafka-topics.bat --create --topic twitter_delete_connect --bootstrap-server localhost:29092 --replication-factor 1 --partitions 3`    
+-  create `run.bat`
+-  got something weird with a lot of warnings and not correct data in kafka consumer
+```
+C:\Users\Admin\IdeaProjects\Study\StephaneMaarek\Kafka\LearnApacheKafkaForBeginners_v2\art-maarek-kafka\kafka-connect>connect-standalone.bat connect-standalone.properties twitter-secret.properties 
+[2021-07-13 15:43:50,246] WARN could not get type for name org.jdom.output.XMLOutputter from any class loader (org.reflections.Reflections)
+org.reflections.ReflectionsException: could not get type for name org.jdom.output.XMLOutputter
+	at org.reflections.ReflectionUtils.forName(ReflectionUtils.java:312)
+	at org.reflections.Reflections.expandSuperTypes(Reflections.java:382)
+	at org.reflections.Reflections.<init>(Reflections.java:140)
+	at org.apache.kafka.connect.runtime.isolation.DelegatingClassLoader$InternalReflections.<init>(DelegatingClassLoader.java:444)
+```
+   
+
+
+              
