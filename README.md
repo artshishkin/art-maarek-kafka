@@ -284,4 +284,24 @@ I won't display Twitter content off of Twitter.
     -  (easy) `enable.auto.commit=true` & synchronous processing of batches
         -  offsets will be commited at a regular interval (`auto.commit.interval.ms=5000` by default) every time you call `.poll()`
         -  is quite risky because if you don't use synchronous processing you will be in `at-most-once` behaviour because offsets will be committed before data is processed    
-    -  (medium) `enable.auto.commit=false` & manual commit of offsets    
+    -  (medium) `enable.auto.commit=false` & manual commit of offsets
+    
+#####  Fixing bug when sending to Elasticsearch
+
+-  increasing Total Fields limit in Local Elasticsearch
+
+```shell script
+curl --location --request PUT 'http://localhost:9200/twitter/_settings' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "index.mapping.total_fields.limit": 2000
+}'
+```
+
+-  increasing Total Fields limit in Bonsai Elasticsearch
+
+```
+/PUT /twitter/_settings {"index.mapping.total_fields.limit": 2000}
+```
+
+        

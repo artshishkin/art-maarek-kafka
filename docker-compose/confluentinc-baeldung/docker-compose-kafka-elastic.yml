@@ -77,6 +77,8 @@ services:
       interval: 20s
       timeout: 10s
       retries: 3
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
 
 volumes:
   zookeeper_data:
@@ -87,3 +89,4 @@ volumes:
   kafka_secrets_2:
   kafka_data_3:
   kafka_secrets_3:
+  elasticsearch_data:

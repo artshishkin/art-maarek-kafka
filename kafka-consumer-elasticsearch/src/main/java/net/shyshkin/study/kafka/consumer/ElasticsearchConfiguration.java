@@ -31,11 +31,12 @@ public class ElasticsearchConfiguration {
 
     public RestHighLevelClient getClient() {
         if (client == null)
-            client = createClient();
+//            client = createLocalClient();
+            client = createSecuredClient();
         return client;
     }
 
-    private RestHighLevelClient createClient() {
+    private RestHighLevelClient createSecuredClient() {
 
         String hostname = getHostname();
         HttpHost host = HttpHost.create(hostname);
@@ -45,6 +46,17 @@ public class ElasticsearchConfiguration {
                 .builder(host)
                 .setHttpClientConfigCallback(
                         httpClientBuilder -> httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider));
+
+        return new RestHighLevelClient(restClientBuilder);
+    }
+
+    private RestHighLevelClient createLocalClient() {
+
+        String hostname = "http://localhost:9200";
+        HttpHost host = HttpHost.create(hostname);
+
+        RestClientBuilder restClientBuilder = RestClient
+                .builder(host);
 
         return new RestHighLevelClient(restClientBuilder);
     }
