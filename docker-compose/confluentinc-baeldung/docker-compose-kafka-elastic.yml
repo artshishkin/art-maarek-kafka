@@ -46,7 +46,7 @@ services:
     volumes:
       - kafka_data_2:/var/lib/kafka/data
       - kafka_secrets_2:/etc/kafka/secrets
-      - ./../../kafka-connect:/usr/share/kafka-connect
+#      - ./../../kafka-connect:/usr/share/kafka-connect
 
   kafka-3:
     image: confluentinc/cp-kafka:latest
